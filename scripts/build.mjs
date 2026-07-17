@@ -6,7 +6,7 @@
 //
 // Usage: node scripts/build.mjs designs/<name> [more design dirs...]
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, copyFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { resolve, join } from 'node:path';
 
@@ -62,9 +62,16 @@ function build(designDir) {
   console.log(`built ${designDir}/index.html (${kb} KB)`);
 }
 
-const targets = process.argv.slice(2);
+const args = process.argv.slice(2);
+const flags = args.filter(a => a.startsWith('--'));
+const targets = args.filter(a => !a.startsWith('--'));
 if (targets.length === 0) {
-  console.error('usage: node scripts/build.mjs designs/<name> [...]');
+  console.error('usage: node scripts/build.mjs designs/<name> [...] [--promote]');
+  console.error('  --promote  also copy the FIRST target\'s build to the repo-root index.html');
   process.exit(1);
 }
 for (const t of targets) build(t);
+if (flags.includes('--promote')) {
+  copyFileSync(join(resolve(ROOT, targets[0]), 'index.html'), join(ROOT, 'index.html'));
+  console.log(`promoted ${targets[0]}/index.html -> index.html (site root)`);
+}
