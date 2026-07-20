@@ -30,15 +30,17 @@ exact people it was built for.
   status-safety filter) → ranked matches with reason chips.
 - **A browsable directory** — filter by category, grade, urgency, coverage, and a
   status-safe toggle; full-text search; per-program detail with sources.
-- **Three complete design variants** of the same product, to pick a direction:
+- **Three complete design variants** of the same product, built to pick a direction:
 
-| # | Variant | Direction |
-|---|---|---|
-| 01 | [`designs/wiki`](designs/wiki/) | dark research-wiki — the reptides homage: glass panels, mono data, grade chips |
-| 02 | [`designs/guide`](designs/guide/) | warm civic field guide — calm, kind, built for someone having the worst week of their life |
-| 03 | [`designs/atlas`](designs/atlas/) | bold opportunity atlas — electric poster energy for artists and founders |
+| # | Variant | Direction | |
+|---|---|---|---|
+| 01 | [`designs/wiki`](designs/wiki/) | dark research-wiki — the reptides homage: glass panels, mono data, grade chips | |
+| 02 | [`designs/guide`](designs/guide/) | warm civic field guide — calm, kind, built for someone having the worst week of their life | **← chosen** |
+| 03 | [`designs/atlas`](designs/atlas/) | bold opportunity atlas — electric poster energy for artists and founders | |
 
-Open `index.html` at the repo root to pick between them. Every build is a single
+**The guide won.** `index.html` at the repo root *is* the guide build — that's the
+aidsight app. The candidates remain comparable at [`designs/`](designs/). Every build
+is a single
 self-contained HTML file — no server, no build step to view, no network requests at
 runtime (fonts and data are inlined), which also means **searches never leave the
 page**. For people in vulnerable situations, privacy is a feature.
@@ -46,8 +48,9 @@ page**. For people in vulnerable situations, privacy is a feature.
 ## Repo layout
 
 ```
-index.html            design picker
+index.html            the aidsight app (the promoted "guide" build)
 data/programs.json    the verified dataset (canonical)
+designs/index.html    design-candidate comparison page
 designs/<name>/       template.html (source) + index.html (built, self-contained)
 scripts/build.mjs     injects data + inlines fonts → designs/<name>/index.html
 docs/DESIGN-SPEC.md   the shared product spec all variants implement
@@ -56,7 +59,8 @@ docs/DESIGN-SPEC.md   the shared product spec all variants implement
 ## Rebuilding after editing data or templates
 
 ```
-node scripts/build.mjs designs/wiki designs/guide designs/atlas
+node scripts/build.mjs designs/guide --promote   # rebuild the app + refresh root index.html
+node scripts/build.mjs designs/wiki designs/atlas  # rebuild the other candidates
 ```
 
 ## Honest limitations (it's an MVP)
